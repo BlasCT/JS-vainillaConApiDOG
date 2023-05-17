@@ -1,5 +1,14 @@
 const selectBreed = document.querySelector("#select-breed");
 const gallery = document.querySelector(".gallery");
+const btnClose = document.querySelector("#btn-close");
+const galleryResult = document.querySelector(".gallery-result");
+const main = document.querySelector("main");
+
+btnClose.addEventListener("click",(e)=>{
+    btnClose.style.display = "none";
+    galleryResult.style.display = "none";
+    main.style.display = "block";
+})
 
 async function getBreeds() {
   const response = await fetch("https://dog.ceo/api/breeds/list/all");
@@ -14,6 +23,15 @@ async function getBreeds() {
 }
 getBreeds();
 
+function showImage(image){
+    main.style.display = "none";
+    btnClose.style.display = "block";
+    galleryResult.style.display = "block";
+    galleryResult.innerHTML = `
+        <img width = "500px" src="${image.src}" >
+    `;
+}
+
 //change solo capta cada vez que cambian de opcion y es especifico para el select
 selectBreed.addEventListener("change", async function () {
   const currentBreed = this.value;
@@ -26,7 +44,7 @@ selectBreed.addEventListener("change", async function () {
   gallery.innerHTML = "";
   images.forEach((image) => {
     gallery.innerHTML += `
-        <img src="${image}" loading="lazy"/>    
+        <img src="${image}" onclick="showImage(this)" loading="lazy"/>    
     `;
   });
 });
